@@ -1,0 +1,51 @@
+---
+title: "Lead IQ Report"
+author: "Sarah Bird"
+date: "2022-10-09"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+```
+
+First we must read in the data. 
+
+```{r}
+data <- read.csv("lead-iq-01.csv")
+dataNear <- data %>% filter(Smelter == "Near") 
+dataFar <- data %>% filter(Smelter == "Far")
+```
+
+
+Now we can use this data to create a graph showing IQ levels by location status
+
+
+```{r}
+ggplot(data=dataNear, aes(x=IQ)) + geom_histogram()
+ggplot(data=dataFar, aes(x=IQ)) + geom_histogram()
+```
+
+
+
+Let's view all of the observations of IQ in the near
+
+```{r}
+tableInfo <- matrix( data = c(mean(dataNear$IQ), mean(dataFar$IQ), sd(dataNear$IQ), sd(dataFar$IQ)), nrow =2,
+                    ncol = 2, byrow = TRUE)
+colnames(tableInfo) <- c("Near", "Far")
+rownames(tableInfo) <- c("Mean", "SD")
+  
+kable(tableInfo)
+```
+
+
+Thus we can see that the mean of the near variable is `r round(mean(dataNear$IQ), digits=3)` while the mean of the far variable is `r round(mean(dataFar$IQ), digits=3)`.
+
+We can see that the variation in the far variable is much larger than that of the variation in the near variable. Additionally, we can see that the mean is much higher in the far variable as well. 
+
+
+
